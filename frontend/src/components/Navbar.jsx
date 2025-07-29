@@ -2,30 +2,26 @@ import React from 'react';
 import { Menu } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
-const Navbar = ({ toggleSidebar, isSidebarOpen }) => {
+const Navbar = ({ toggleSidebar }) => {
   const { user, loading } = useAuth();
-
+  
   const getInitials = (name) => {
     if (!name) return '';
     const names = name.split(' ');
-
     if (names.length === 1) return names[0][0].toUpperCase();
     return (names[0][0] + names[names.length - 1][0]).toUpperCase();
   };
 
   return (
-    <nav 
-      className={`fixed top-0 bg-black/30 backdrop-blur-md z-10 transition-all duration-300 
-                 ${isSidebarOpen ? 'left-0 md:left-64 w-full md:w-[calc(100%-16rem)]' : 'left-0 w-full'}`}
-    >
-      <div className='flex items-center justify-between md:px-10 px-6 py-2 border-b border-gray-700'>
+    <nav className='bg-black/30 backdrop-blur-sm z-10 border-b border-gray-700'>
+      <div className='flex items-center justify-between md:px-10 px-6 py-2 h-16'>
         <div className='flex items-center gap-4'>
           <button onClick={toggleSidebar} className='p-2 rounded-full hover:bg-white/20'>
             <Menu size={20} className='text-white' />
           </button>
+          <img src="/logo.png" alt="logo" className='h-8 w-8' />
           <h1 className='text-md font-inter font-semibold text-white'>CogniChat</h1>
         </div>
-
         <div className='flex items-center'>
           {loading ? (
             <div className='h-8 w-8 bg-gray-700 rounded-full animate-pulse'></div>
