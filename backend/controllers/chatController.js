@@ -2,9 +2,6 @@ import Chat from '../models/chatModel.js';
 import Message from '../models/messageModel.js';
 import { genAI } from '../lib/gemini.js';
 
-// @desc    Get all of a user's chats (titles and IDs only)
-// @route   GET /api/chats
-// @access  Private
 export const getMyChats = async (req, res) => {
   try {
     const chats = await Chat.find({ userId: req.user._id }).select('title');
@@ -15,9 +12,6 @@ export const getMyChats = async (req, res) => {
   }
 };
 
-// @desc    Get a specific chat by its ID with all messages
-// @route   GET /api/chats/:id
-// @access  Private
 export const getChatById = async (req, res) => {
   try {
     const chat = await Chat.findById(req.params.id).populate('messages');
@@ -33,9 +27,6 @@ export const getChatById = async (req, res) => {
   }
 };
 
-// @desc    Generate a response and save the conversation
-// @route   POST /api/chats/generate
-// @access  Private
 export const generateChatResponse = async (req, res) => {
   const { prompt, chatId } = req.body;
   const userId = req.user._id;
@@ -45,10 +36,7 @@ export const generateChatResponse = async (req, res) => {
   }
 
   try {
-    // 1. Create and save the user's message
     const userMessage = await Message.create({ role: "user", content: prompt });
-
-    // ✨ FIX: Switched back to the 'flash' model to avoid rate-limiting issues on the free tier.
     const model = genAI.getGenerativeModel({ 
       model: "gemini-1.5-flash-latest",
       systemInstruction: "You are CogniChat, a helpful and friendly AI assistant. Your goal is to provide clear, concise, and accurate information to the user.",
@@ -58,13 +46,11 @@ export const generateChatResponse = async (req, res) => {
     const response = await result.response;
     const aiText = response.text();
 
-    // 3. Create and save the AI's message
     const aiMessage = await Message.create({ role: "model", content: aiText });
 
     let currentChat;
 
     if (chatId) {
-      // If continuing an existing chat, find it
       currentChat = await Chat.findById(chatId);
 
       if (!currentChat || currentChat.userId.toString() !== userId.toString()) {
@@ -74,10 +60,9 @@ export const generateChatResponse = async (req, res) => {
       currentChat.messages.push(userMessage._id, aiMessage._id);
 
     } else {
-      // If it's a new chat, create it
       currentChat = new Chat({
         userId,
-        title: prompt.substring(0, 30), // Use first 30 chars as title
+        title: prompt.substring(0, 30), 
         messages: [userMessage._id, aiMessage._id]
       });
     }
