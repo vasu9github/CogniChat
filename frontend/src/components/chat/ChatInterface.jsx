@@ -4,12 +4,11 @@ import Textarea from 'react-textarea-autosize';
 import axios from 'axios';
 import { useAuth } from '../../context/AuthContext';
 
-const ChatInterface = () => {
+const ChatInterface = ({ selectedChatId, setSelectedChatId, setChats }) => {
   const { user } = useAuth();
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
-  const [currentChatId, setCurrentChatId] = useState(null);
 
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
@@ -17,6 +16,25 @@ const ChatInterface = () => {
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, loading]);
+
+  useEffect(() => {
+    const fetchMessages = async () => {
+      if (!selectedChatId) {
+        setMessages([]);
+        return;
+      }
+      setLoading(true);
+      try {
+        const res = await axios.get(`http://localhost:3000/api/chats/${selectedChatId}`, { withCredentials: true });
+        setMessages(res.data.messages);
+      } catch (error) {
+        setMessages([{ role: 'model', content: 'Failed to load this conversation.' }]);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchMessages();
+  }, [selectedChatId]);
 
   const handleSendMessage = async (e) => {
     e.preventDefault();
@@ -30,16 +48,19 @@ const ChatInterface = () => {
     try {
       const response = await axios.post('http://localhost:3000/api/chats/generate', {
         prompt: input,
-        chatId: currentChatId
+        chatId: selectedChatId
       }, {
         withCredentials: true,
       });
 
       const aiMessage = { role: 'model', content: response.data.aiResponse };
       setMessages(prev => [...prev, aiMessage]);
-      setCurrentChatId(response.data.chat._id);
+
+      if (!selectedChatId) {
+        setSelectedChatId(response.data.chat._id);
+        setChats(prevChats => [response.data.chat, ...prevChats]);
+      }
     } catch (error) {
-      console.error("Error sending message:", error);
       const errorMessage = { role: 'model', content: "Sorry, I couldn't get a response. Please try again." };
       setMessages(prev => [...prev, errorMessage]);
     } finally {
@@ -51,9 +72,9 @@ const ChatInterface = () => {
   return (
     <div className='flex flex-col flex-1 min-h-0 bg-black'>
       <div className='flex-1 p-6 space-y-4 overflow-y-auto'>
-        {messages.length === 0 ? (
+        {messages.length === 0 && !loading ? (
           <div className='text-center h-full flex flex-col items-center justify-center'>
-            <img width={66} height={66} src="/logo.png" alt="" />
+            <img width={66} height={66} src="/logo.png" alt="CogniChat Logo" />
             <h2 className='text-3xl m-2 font-bold text-gray-200'>CogniChat</h2>
             <p className='text-gray-400'>Start a conversation by typing below.</p>
           </div>
@@ -79,7 +100,6 @@ const ChatInterface = () => {
         )}
         <div ref={messagesEndRef} />
       </div>
-      
       <div className='p-4 bg-black border-t border-gray-800'>
         <form onSubmit={handleSendMessage} className='relative max-w-4xl mx-auto flex items-end'>
           <Textarea
