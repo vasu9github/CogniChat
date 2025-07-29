@@ -1,10 +1,11 @@
-import React from 'react';
-import { Menu } from 'lucide-react';
+import React, { useState } from 'react';
+import { Menu, LogOut } from 'lucide-react'; 
 import { useAuth } from '../context/AuthContext';
 
 const Navbar = ({ toggleSidebar }) => {
-  const { user, loading } = useAuth();
-  
+  const { user, loading, logout } = useAuth(); 
+  const [isDropdownOpen, setDropdownOpen] = useState(false);
+
   const getInitials = (name) => {
     if (!name) return '';
     const names = name.split(' ');
@@ -26,11 +27,33 @@ const Navbar = ({ toggleSidebar }) => {
           {loading ? (
             <div className='h-8 w-8 bg-gray-700 rounded-full animate-pulse'></div>
           ) : user ? (
-            <div className='h-8 w-8 rounded-full flex items-center justify-center bg-gray-600 overflow-hidden'>
-              {user.profilePicture ? (
-                <img src={user.profilePicture} alt={user.fullName} className='h-full w-full object-cover' />
-              ) : (
-                <span className='font-semibold text-white text-xs'>{getInitials(user.fullName)}</span>
+            
+            <div className='relative'>
+              <button 
+                onClick={() => setDropdownOpen(!isDropdownOpen)} 
+                className='h-8 w-8 rounded-full flex items-center justify-center bg-gray-600 overflow-hidden focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white'
+              >
+                {user.profilePicture ? (
+                  <img src={user.profilePicture} alt={user.fullName} className='h-full w-full object-cover' />
+                ) : (
+                  <span className='font-semibold text-white text-xs'>{getInitials(user.fullName)}</span>
+                )}
+              </button>
+
+             
+              {isDropdownOpen && (
+                <div 
+                  className='absolute right-0 mt-2 w-48 bg-gray-800 rounded-md shadow-lg py-1 z-20'
+                  onMouseLeave={() => setDropdownOpen(false)} 
+                >
+                  <button 
+                    onClick={logout} 
+                    className='w-full text-left px-4 py-2 text-sm text-gray-200 hover:bg-gray-700 flex items-center gap-2'
+                  >
+                    <LogOut size={16} />
+                    Log Out
+                  </button>
+                </div>
               )}
             </div>
           ) : (
