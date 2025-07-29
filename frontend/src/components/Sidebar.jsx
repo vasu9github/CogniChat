@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Search, Plus, User, MessageSquare, Trash2, X } from 'lucide-react';
 import axios from 'axios';
@@ -11,7 +12,7 @@ const Sidebar = ({ isOpen, toggleSidebar, setSelectedChatId, startNewChat, chats
     const fetchChats = async () => {
       if (user) {
         try {
-          const res = await axios.get('https://cognichat-backend.onrender.com', { withCredentials: true });
+          const res = await axios.get('https://cognichat-backend.onrender.com/api/chats', { withCredentials: true });
           setChats(res.data);
         } catch (error) {
           console.error("Failed to fetch chats", error);
@@ -25,7 +26,7 @@ const Sidebar = ({ isOpen, toggleSidebar, setSelectedChatId, startNewChat, chats
     e.stopPropagation();
     if (window.confirm("Are you sure you want to delete this chat?")) {
         try {
-            await axios.delete(`https://cognichat-backend.onrender.com`, { withCredentials: true });
+            await axios.delete(`https://cognichat-backend.onrender.com/api/chats/${chatId}`, { withCredentials: true });
             setChats(chats.filter(chat => chat._id !== chatId));
             startNewChat();
         } catch (error) {

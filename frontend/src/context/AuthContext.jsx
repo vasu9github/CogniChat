@@ -9,7 +9,7 @@ export const AuthProvider = ({ children }) => {
 
     const logout = async () => {
         try {
-            await axios.post('https://cognichat-backend.onrender.com',{} , {
+            await axios.post('https://cognichat-backend.onrender.com/auth/logout',{} , {
                 withCredentials:true,
         });
         setUser(null)
@@ -21,7 +21,7 @@ export const AuthProvider = ({ children }) => {
     useEffect(() => {
         const checkedLoggedIn = async () => {
             try {
-                const response = await axios.get('https://cognichat-backend.onrender.com' , {
+                const response = await axios.get('https://cognichat-backend.onrender.com/auth/current_user' , {
                     withCredentials:true
                 })
                 setUser(response.data)
