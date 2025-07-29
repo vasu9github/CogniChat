@@ -57,7 +57,7 @@ const Navbar = ({ toggleSidebar }) => {
               )}
             </div>
           ) : (
-            <a href='http://localhost:3000/auth/google' className='bg-white px-2 py-1 text-black rounded-lg text-sm font-semibold hover:bg-gray-200 transition-colors duration-300'>
+            <a href='https://cognichat-backend.onrender.com' className='bg-white px-2 py-1 text-black rounded-lg text-sm font-semibold hover:bg-gray-200 transition-colors duration-300'>
               Sign Up
             </a>
           )}

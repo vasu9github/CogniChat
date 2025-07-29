@@ -25,7 +25,7 @@ const ChatInterface = ({ selectedChatId, setSelectedChatId, setChats }) => {
       }
       setLoading(true);
       try {
-        const res = await axios.get(`http://localhost:3000/api/chats/${selectedChatId}`, { withCredentials: true });
+        const res = await axios.get(`https://cognichat-backend.onrender.com`, { withCredentials: true });
         setMessages(res.data.messages);
       } catch (error) {
         setMessages([{ role: 'model', content: 'Failed to load this conversation.' }]);
@@ -46,7 +46,7 @@ const ChatInterface = ({ selectedChatId, setSelectedChatId, setChats }) => {
     setLoading(true);
 
     try {
-      const response = await axios.post('http://localhost:3000/api/chats/generate', {
+      const response = await axios.post('https://cognichat-backend.onrender.com', {
         prompt: input,
         chatId: selectedChatId
       }, {
