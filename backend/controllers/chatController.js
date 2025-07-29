@@ -35,13 +35,44 @@ export const generateChatResponse = async (req, res) => {
   }
 
   try {
-    const userMessage = await Message.create({ role: "user", content: prompt });
+    const userMessagePromise = Message.create({ role: "user", content: prompt });
     
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash-latest" });
-    const result = await model.generateContent(prompt);
+    let conversationHistory = [];
+    if (chatId) {
+      const existingChat = await Chat.findById(chatId).populate({
+        path: 'messages',
+        options: { sort: { createdAt: -1 }, limit: 5 }
+      });
+      if (existingChat && existingChat.userId.toString() === userId.toString()) {
+        conversationHistory = existingChat.messages.reverse().map(msg => ({
+          role: msg.role,
+          parts: [{ text: msg.content }]
+        }));
+      }
+    }
+
+  
+    const conversation = [
+      ...conversationHistory,
+      { role: "user", parts: [{ text: prompt }] }
+    ];
+
+    const model = genAI.getGenerativeModel({ 
+      model: "gemini-1.5-flash-latest",
+      generationConfig: {
+        temperature: 0.7,
+        topK: 40,
+        topP: 0.95,
+        maxOutputTokens: 1024,
+        candidateCount: 1,
+      },
+    });
+
+    const result = await model.generateContent({ contents: conversation }); 
     const response = await result.response;
     const aiText = response.text();
     
+    const userMessage = await userMessagePromise;
     const aiMessage = await Message.create({ role: "model", content: aiText });
 
     let currentChat;
@@ -62,6 +93,7 @@ export const generateChatResponse = async (req, res) => {
     await currentChat.save();
     res.status(201).json({ aiResponse: aiText, chat: currentChat });
   } catch (error) {
+    console.error('AI generation error:', error);
     res.status(500).json({ error: "Failed to generate response" });
   }
 };
