@@ -6,8 +6,8 @@ const router = express.Router();
 router.get('/google' , passport.authenticate('google' , { scope : ['profile' , 'email']}))
 
 router.get('/google/callback' , passport.authenticate('google' , {
-    successRedirect: 'http://localhost:5173',
-    failureRedirect: 'http://localhost:5173/login'
+    successRedirect: 'https://cogni-chat-six.vercel.app',
+    failureRedirect: 'https://cogni-chat-six.vercel.app'
 }));
 
 router.get('/current_user' , ( req , res) => {
