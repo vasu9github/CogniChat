@@ -242,11 +242,11 @@
 // export default Sidebar;
 
 // Same imports
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
-import { useEffect } from "react";
 import { MessageSquare, Plus, Search, Trash2, User, X } from "lucide-react";
 import axios from "axios";
+
 const Sidebar = ({ isOpen, toggleSidebar, setSelectedChatId, startNewChat, chats, setChats }) => {
   const { user } = useAuth();
   const [searchTerm, setSearchTerm] = useState('');
@@ -288,7 +288,8 @@ const Sidebar = ({ isOpen, toggleSidebar, setSelectedChatId, startNewChat, chats
   return (
     <>
       {isOpen && <div onClick={toggleSidebar} className='fixed inset-0 bg-black/60 z-50 md:hidden'></div>}
-      <aside className={`fixed md:relative bg-black h-full border-r border-gray-700 transition-all z-40 md:z-0
+      {/* --- FIX: Added overflow-hidden to the line below --- */}
+      <aside className={`fixed md:relative bg-black h-full border-r border-gray-700 transition-all z-40 md:z-0 overflow-hidden
         ${isOpen ? 'w-64 translate-x-0' : 'w-0 -translate-x-full md:translate-x-0'}`}>
         <div className='w-64 h-full flex flex-col'>
           <div className='p-4 border-b border-gray-700'>
