@@ -71,7 +71,7 @@ const ChatInterface = ({ selectedChatId, setSelectedChatId, setChats }) => {
   };
 
   return (
-    <div className='flex flex-col flex-1 min-h-0 bg-black'>
+    <div className='flex flex-col flex-1 min-h-0 bg-black z-90'>
       <div className='flex-1 p-6 space-y-4 overflow-y-auto'>
         {messages.length === 0 && !loading ? (
           <div className='text-center h-full flex flex-col items-center justify-center'>
