@@ -70,7 +70,7 @@
 // export default Navbar;
 
 import React from 'react';
-import { Menu } from 'lucide-react';
+import { Menu,  } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 const Navbar = ({ toggleSidebar }) => {
