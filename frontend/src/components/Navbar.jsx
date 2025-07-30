@@ -75,7 +75,7 @@ import { useAuth } from '../context/AuthContext';
 
 const Navbar = ({ toggleSidebar }) => {
   const { user, loading } = useAuth();
-  
+
   const getInitials = (name) => {
     if (!name) return '';
     const names = name.split(' ');
@@ -84,7 +84,7 @@ const Navbar = ({ toggleSidebar }) => {
   };
 
   return (
-    <nav className='bg-black/30 backdrop-blur-sm z-10 border-b border-gray-700'>
+    <nav className='bg-black/30 backdrop-blur-sm z-30 border-b border-gray-700'>
       <div className='flex items-center justify-between md:px-10 px-6 py-2 h-16'>
         <div className='flex items-center gap-4'>
           <button onClick={toggleSidebar} className='p-2 rounded-full hover:bg-white/20'>

@@ -243,8 +243,7 @@
 import { Search, Plus, User, MessageSquare, Trash2, X } from 'lucide-react';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
-import { useState } from 'react';
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
 const Sidebar = ({ isOpen, toggleSidebar, setSelectedChatId, startNewChat, chats, setChats }) => {
   const { user } = useAuth();
@@ -267,31 +266,28 @@ const Sidebar = ({ isOpen, toggleSidebar, setSelectedChatId, startNewChat, chats
   const handleDelete = async (e, chatId) => {
     e.stopPropagation();
     if (window.confirm("Are you sure you want to delete this chat?")) {
-        try {
-            await axios.delete(`https://cognichat-backend.onrender.com/api/chats/${chatId}`, { withCredentials: true });
-            setChats(chats.filter(chat => chat._id !== chatId));
-            startNewChat();
-        } catch (error) {
-            console.error("Failed to delete chat", error);
-        }
+      try {
+        await axios.delete(`https://cognichat-backend.onrender.com/api/chats/${chatId}`, { withCredentials: true });
+        setChats(chats.filter(chat => chat._id !== chatId));
+        startNewChat();
+      } catch (error) {
+        console.error("Failed to delete chat", error);
+      }
     }
   };
 
-  const filteredChats = chats.filter(chat => 
+  const filteredChats = chats.filter(chat =>
     chat.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
     <>
-      {/* Overlay for mobile view, appears when sidebar is open */}
-      {isOpen && <div onClick={toggleSidebar} className="fixed inset-0 bg-black/60 z-30 md:hidden"></div>}
+      {isOpen && <div onClick={toggleSidebar} className="fixed inset-0 bg-black/60 z-50 md:hidden"></div>}
 
       <aside
-        // ✨ FIX: Added 'pointer-events-none' when closed to allow clicks to pass through.
-        // The z-index is also adjusted to prevent stacking issues.
         className={`fixed md:relative flex-shrink-0 bg-black h-full border-r border-gray-700 transition-all duration-300 ease-in-out
-                   transform md:transform-none
-                   ${isOpen ? 'w-64 translate-x-0 z-20' : 'w-0 md:w-0 border-r-0 -translate-x-full md:translate-x-0 z-0 pointer-events-none'}`}
+          transform md:transform-none
+          ${isOpen ? 'w-64 translate-x-0 z-40' : 'w-0 md:w-0 border-r-0 -translate-x-full md:translate-x-0 z-0 pointer-events-none'}`}
       >
         <div className="w-64 h-full flex flex-col overflow-hidden">
           <div className='p-4 border-b border-gray-700'>
@@ -317,21 +313,21 @@ const Sidebar = ({ isOpen, toggleSidebar, setSelectedChatId, startNewChat, chats
               />
             </div>
           </div>
-          
+
           <div className='flex-1 p-2 overflow-y-auto'>
             {filteredChats.length > 0 ? (
               filteredChats.map(chat => (
                 <div key={chat._id} className="group relative flex items-center">
-                    <button 
+                  <button
                     onClick={() => setSelectedChatId(chat._id)}
                     className="flex-1 text-left p-2 rounded-md hover:bg-gray-700 transition-colors flex items-center gap-2"
-                    >
+                  >
                     <MessageSquare size={16} />
                     <span className="truncate">{chat.title}</span>
-                    </button>
-                    <button onClick={(e) => handleDelete(e, chat._id)} className="p-1 rounded-md text-gray-400 hover:text-white hover:bg-red-500 opacity-100 md:opacity-0 group-hover:opacity-100 transition-opacity">
-                        <Trash2 size={14} />
-                    </button>
+                  </button>
+                  <button onClick={(e) => handleDelete(e, chat._id)} className="p-1 rounded-md text-gray-400 hover:text-white hover:bg-red-500 opacity-100 md:opacity-0 group-hover:opacity-100 transition-opacity">
+                    <Trash2 size={14} />
+                  </button>
                 </div>
               ))
             ) : (
@@ -344,9 +340,9 @@ const Sidebar = ({ isOpen, toggleSidebar, setSelectedChatId, startNewChat, chats
               <div className='flex items-center gap-3'>
                 <div className='w-10 h-10 rounded-full bg-gray-700 flex items-center justify-center overflow-hidden'>
                   {user.profilePicture ? (
-                      <img src={user.profilePicture} alt={user.fullName} className="h-full w-full object-cover" />
+                    <img src={user.profilePicture} alt={user.fullName} className="h-full w-full object-cover" />
                   ) : (
-                      <User size={20} color='white' />
+                    <User size={20} color='white' />
                   )}
                 </div>
                 <div>
@@ -363,4 +359,5 @@ const Sidebar = ({ isOpen, toggleSidebar, setSelectedChatId, startNewChat, chats
 };
 
 export default Sidebar;
+
 
