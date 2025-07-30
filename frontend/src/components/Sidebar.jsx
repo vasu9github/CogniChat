@@ -284,7 +284,7 @@ const Sidebar = ({ isOpen, toggleSidebar, setSelectedChatId, startNewChat, chats
   return (
     <>
       {/* Overlay for mobile view, appears when sidebar is open */}
-      {isOpen && <div onClick={toggleSidebar} className="fixed inset-0 bg-black/60 z-10 md:hidden"></div>}
+      {isOpen && <div onClick={toggleSidebar} className="fixed inset-0 bg-black/60 z-30 md:hidden"></div>}
 
       <aside
         // ✨ FIX: Added 'pointer-events-none' when closed to allow clicks to pass through.
