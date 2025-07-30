@@ -246,6 +246,7 @@ import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useEffect } from "react";
 import { MessageSquare, Plus, Search, Trash2, User, X } from "lucide-react";
+import axios from "axios";
 const Sidebar = ({ isOpen, toggleSidebar, setSelectedChatId, startNewChat, chats, setChats }) => {
   const { user } = useAuth();
   const [searchTerm, setSearchTerm] = useState('');
