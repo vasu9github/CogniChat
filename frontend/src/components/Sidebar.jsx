@@ -243,6 +243,7 @@
 import { Search, Plus, User, MessageSquare, Trash2, X } from 'lucide-react';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
+import { useState } from 'react';
 
 const Sidebar = ({ isOpen, toggleSidebar, setSelectedChatId, startNewChat, chats, setChats }) => {
   const { user } = useAuth();
