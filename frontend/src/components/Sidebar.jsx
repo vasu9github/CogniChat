@@ -4,6 +4,8 @@
 // import axios from 'axios';
 // import { useAuth } from '../context/AuthContext';
 
+
+
 // const Sidebar = ({ isOpen, toggleSidebar, setSelectedChatId, startNewChat, chats, setChats }) => {
 //   const { user } = useAuth();
 //   const [searchTerm, setSearchTerm] = useState('');
@@ -240,7 +242,9 @@
 // export default Sidebar;
 
 // Same imports
-
+import { useState } from "react";
+import { useAuth } from "../context/AuthContext";
+import { useEffect } from "react";
 const Sidebar = ({ isOpen, toggleSidebar, setSelectedChatId, startNewChat, chats, setChats }) => {
   const { user } = useAuth();
   const [searchTerm, setSearchTerm] = useState('');
