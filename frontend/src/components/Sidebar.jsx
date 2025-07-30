@@ -295,7 +295,7 @@ const Sidebar = ({ isOpen, toggleSidebar, setSelectedChatId, startNewChat, chats
 
   return (
     <>
-      {isOpen && <div onClick={toggleSidebar} className="fixed inset-0 bg-black/60 z-10 md:hidden"></div>}
+      {isOpen && <div onClick={toggleSidebar} className="fixed inset-0 bg-black/60 z-20 md:hidden"></div>}
       <aside
         className={`fixed md:relative z-20 flex-shrink-0 bg-black h-full border-r border-gray-700 transition-all duration-300 ease-in-out
                    transform md:transform-none
