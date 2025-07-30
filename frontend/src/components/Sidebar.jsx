@@ -240,7 +240,6 @@
 // export default Sidebar;
 
 
-import React, { useState, useEffect } from 'react';
 import { Search, Plus, User, MessageSquare, Trash2, X } from 'lucide-react';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
@@ -248,19 +247,6 @@ import { useAuth } from '../context/AuthContext';
 const Sidebar = ({ isOpen, toggleSidebar, setSelectedChatId, startNewChat, chats, setChats }) => {
   const { user } = useAuth();
   const [searchTerm, setSearchTerm] = useState('');
-
-  // ✨ FIX #1: This useEffect will lock the body scroll when the sidebar is open on mobile.
-  useEffect(() => {
-    if (isOpen && window.innerWidth < 768) { // 768px is the 'md' breakpoint
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'auto';
-    }
-    // Cleanup function to ensure scroll is re-enabled when the component unmounts
-    return () => {
-      document.body.style.overflow = 'auto';
-    };
-  }, [isOpen]);
 
   useEffect(() => {
     const fetchChats = async () => {
@@ -295,11 +281,15 @@ const Sidebar = ({ isOpen, toggleSidebar, setSelectedChatId, startNewChat, chats
 
   return (
     <>
-      {isOpen && <div onClick={toggleSidebar} className="fixed inset-0 bg-black/60 z-20 md:hidden"></div>}
+      {/* Overlay for mobile view, appears when sidebar is open */}
+      {isOpen && <div onClick={toggleSidebar} className="fixed inset-0 bg-black/60 z-10 md:hidden"></div>}
+
       <aside
-        className={`fixed md:relative z-20 flex-shrink-0 bg-black h-full border-r border-gray-700 transition-all duration-300 ease-in-out
+        // ✨ FIX: Added 'pointer-events-none' when closed to allow clicks to pass through.
+        // The z-index is also adjusted to prevent stacking issues.
+        className={`fixed md:relative flex-shrink-0 bg-black h-full border-r border-gray-700 transition-all duration-300 ease-in-out
                    transform md:transform-none
-                   ${isOpen ? 'w-64 translate-x-0' : 'w-0 md:w-0 border-r-0 -translate-x-full md:translate-x-0'}`}
+                   ${isOpen ? 'w-64 translate-x-0 z-20' : 'w-0 md:w-0 border-r-0 -translate-x-full md:translate-x-0 z-0 pointer-events-none'}`}
       >
         <div className="w-64 h-full flex flex-col overflow-hidden">
           <div className='p-4 border-b border-gray-700'>
@@ -337,8 +327,6 @@ const Sidebar = ({ isOpen, toggleSidebar, setSelectedChatId, startNewChat, chats
                     <MessageSquare size={16} />
                     <span className="truncate">{chat.title}</span>
                     </button>
-                    {/* ✨ FIX #2: The delete button is now always visible on mobile (opacity-100)
-                        but only appears on hover on desktop (md:opacity-0). */}
                     <button onClick={(e) => handleDelete(e, chat._id)} className="p-1 rounded-md text-gray-400 hover:text-white hover:bg-red-500 opacity-100 md:opacity-0 group-hover:opacity-100 transition-opacity">
                         <Trash2 size={14} />
                     </button>
@@ -373,3 +361,4 @@ const Sidebar = ({ isOpen, toggleSidebar, setSelectedChatId, startNewChat, chats
 };
 
 export default Sidebar;
+
