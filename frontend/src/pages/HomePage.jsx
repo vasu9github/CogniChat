@@ -1,3 +1,45 @@
+// // import React, { useState } from 'react';
+// // import Sidebar from '../components/Sidebar';
+// // import Navbar from '../components/Navbar';
+// // import ChatInterface from '../components/chat/ChatInterface';
+
+// // const HomePage = () => {
+// //   const [isSidebarOpen, setSidebarOpen] = useState(false);
+// //   const [selectedChatId, setSelectedChatId] = useState(null);
+// //   const [chats, setChats] = useState([]);
+
+// //   const toggleSidebar = () => {
+// //     setSidebarOpen(!isSidebarOpen);
+// //   };
+
+// //   const startNewChat = () => {
+// //     setSelectedChatId(null);
+// //   };
+
+// //   return (
+// //     <div className='bg-black h-screen'>
+// //       <Sidebar 
+// //         isOpen={isSidebarOpen} 
+// //         toggleSidebar={toggleSidebar} 
+// //         setSelectedChatId={setSelectedChatId}
+// //         startNewChat={startNewChat}
+// //         chats={chats}
+// //         setChats={setChats}
+// //       />
+// //       <main className={`flex flex-col h-full transition-all duration-300 ease-in-out ${isSidebarOpen ? 'md:ml-64' : 'ml-0'}`}>
+// //         <Navbar toggleSidebar={toggleSidebar} />
+// //         <ChatInterface 
+// //           selectedChatId={selectedChatId} 
+// //           setSelectedChatId={setSelectedChatId}
+// //           setChats={setChats}
+// //         />
+// //       </main>
+// //     </div>
+// //   );
+// // };
+
+// // export default HomePage;
+
 // import React, { useState } from 'react';
 // import Sidebar from '../components/Sidebar';
 // import Navbar from '../components/Navbar';
@@ -6,7 +48,7 @@
 // const HomePage = () => {
 //   const [isSidebarOpen, setSidebarOpen] = useState(false);
 //   const [selectedChatId, setSelectedChatId] = useState(null);
-//   const [chats, setChats] = useState([]);
+//   const [chats, setChats] = useState([]); 
 
 //   const toggleSidebar = () => {
 //     setSidebarOpen(!isSidebarOpen);
@@ -17,7 +59,7 @@
 //   };
 
 //   return (
-//     <div className='bg-black h-screen'>
+//     <div className='flex h-dvh bg-black text-white'>
 //       <Sidebar 
 //         isOpen={isSidebarOpen} 
 //         toggleSidebar={toggleSidebar} 
@@ -26,19 +68,21 @@
 //         chats={chats}
 //         setChats={setChats}
 //       />
-//       <main className={`flex flex-col h-full transition-all duration-300 ease-in-out ${isSidebarOpen ? 'md:ml-64' : 'ml-0'}`}>
+      
+//       <div className='flex-1 flex flex-col min-w-0'>
 //         <Navbar toggleSidebar={toggleSidebar} />
 //         <ChatInterface 
 //           selectedChatId={selectedChatId} 
 //           setSelectedChatId={setSelectedChatId}
-//           setChats={setChats}
+//           setChats={setChats} 
 //         />
-//       </main>
+//       </div>
 //     </div>
 //   );
 // };
 
 // export default HomePage;
+
 
 import React, { useState } from 'react';
 import Sidebar from '../components/Sidebar';
@@ -46,9 +90,9 @@ import Navbar from '../components/Navbar';
 import ChatInterface from '../components/chat/ChatInterface';
 
 const HomePage = () => {
-  const [isSidebarOpen, setSidebarOpen] = useState(false);
+  const [isSidebarOpen, setSidebarOpen] = useState(true);
   const [selectedChatId, setSelectedChatId] = useState(null);
-  const [chats, setChats] = useState([]); 
+  const [chats, setChats] = useState([]); // State for chats is lifted up
 
   const toggleSidebar = () => {
     setSidebarOpen(!isSidebarOpen);
@@ -74,7 +118,7 @@ const HomePage = () => {
         <ChatInterface 
           selectedChatId={selectedChatId} 
           setSelectedChatId={setSelectedChatId}
-          setChats={setChats} 
+          setChats={setChats} // Pass setChats to update sidebar on new chat
         />
       </div>
     </div>

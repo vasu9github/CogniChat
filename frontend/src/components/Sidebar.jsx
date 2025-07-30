@@ -146,7 +146,7 @@ const Sidebar = ({ isOpen, toggleSidebar, setSelectedChatId, startNewChat, chats
     e.stopPropagation();
     if (window.confirm("Are you sure you want to delete this chat?")) {
         try {
-            await axios.delete(`https://cognichat-backend.onrender.com/api/chats/${chatId}`, { withCredentials: true });
+            await axios.delete('https://cognichat-backend.onrender.com/api/chats/${chatId}', { withCredentials: true });
             setChats(chats.filter(chat => chat._id !== chatId));
             startNewChat();
         } catch (error) {
@@ -161,8 +161,13 @@ const Sidebar = ({ isOpen, toggleSidebar, setSelectedChatId, startNewChat, chats
 
   return (
     <>
+      {/* Overlay for mobile view, appears when sidebar is open */}
       {isOpen && <div onClick={toggleSidebar} className="fixed inset-0 bg-black/60 z-10 md:hidden"></div>}
+
       <aside
+        // ✨ FIX: This is the final, stable layout logic.
+        // On mobile (default), it's a fixed overlay that slides with transform.
+        // On desktop (md:), it's part of the flex layout and transitions its width.
         className={`fixed md:relative z-20 flex-shrink-0 bg-black h-full border-r border-gray-700 transition-all duration-300 ease-in-out
                    transform md:transform-none
                    ${isOpen ? 'w-64 translate-x-0' : 'w-0 md:w-0 border-r-0 -translate-x-full md:translate-x-0'}`}
@@ -201,10 +206,9 @@ const Sidebar = ({ isOpen, toggleSidebar, setSelectedChatId, startNewChat, chats
                     className="w-full text-left p-2 rounded-md hover:bg-gray-700 transition-colors flex items-center gap-2"
                     >
                     <MessageSquare size={16} />
-                    <span className="truncate flex-1">{chat.title}</span>
+                    <span className="truncate">{chat.title}</span>
                     </button>
-                    {/* ✨ FIX: The delete button is now always visible on mobile but only on hover on desktop */}
-                    <button onClick={(e) => handleDelete(e, chat._id)} className="absolute right-2 top-1/2 -translate-y-1/2 p-1 rounded-md text-gray-400 hover:text-white hover:bg-red-500 opacity-100 md:opacity-0 group-hover:opacity-100 transition-opacity">
+                    <button onClick={(e) => handleDelete(e, chat._id)} className="absolute right-2 top-1/2 -translate-y-1/2 p-1 rounded-md text-gray-400 hover:text-white hover:bg-red-500 opacity-0 group-hover:opacity-100 transition-opacity">
                         <Trash2 size={14} />
                     </button>
                 </div>
