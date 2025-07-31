@@ -3,7 +3,7 @@ import { Menu, LogOut } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 const Navbar = ({ toggleSidebar }) => {
-  const { user, loading } = useAuth();
+  const { user, loading , logout } = useAuth();
   const [isPopupOpen, setPopupOpen] = useState(false);
   const popupRef = useRef(null);
 
@@ -59,13 +59,14 @@ const Navbar = ({ toggleSidebar }) => {
                   ref={popupRef}
                   className='absolute top-12 right-0 w-48 bg-gray-800 border border-gray-700 rounded-md shadow-lg py-1 z-50'
                 >
-                  <a
+                  <button
+                    onClick={logout}
                     href='https://cognichat-backend.onrender.com/auth/logout'
                     className='flex items-center gap-3 w-full text-left px-4 py-2 text-sm text-red-400 hover:bg-gray-700 transition-colors'
                   >
                     <LogOut size={16} />
                     <span>Logout</span>
-                  </a>
+                  </button>
                 </div>
               )}
             </>
