@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from 'react'
 import axios from 'axios'
+import toast from 'react-hot-toast';
 
 const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
@@ -13,6 +14,7 @@ export const AuthProvider = ({ children }) => {
                 withCredentials:true,
         });
         setUser(null)
+        toast.success("Logged out successfully!");
         } catch (error) {
             console.error(`Failed to log out` , error)
         }
@@ -25,8 +27,17 @@ export const AuthProvider = ({ children }) => {
                     withCredentials:true
                 })
                 setUser(response.data)
+                if (!sessionStorage.getItem('toastShown')) {
+                    toast.success(`Welcome back, ${response.data.fullName.split(' ')[0]}!`);
+                    sessionStorage.setItem('toastShown', 'true');
+                 }else {
+                    setUser(null);
+                    sessionStorage.removeItem('toastShown');
+                }
+                
             } catch (error) {
                 setUser(null);
+                sessionStorage.removeItem('toastShown');
             }
             finally{
                 setLoading(false)

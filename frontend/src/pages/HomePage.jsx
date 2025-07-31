@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Sidebar from '../components/Sidebar';
 import Navbar from '../components/Navbar';
 import ChatInterface from '../components/chat/ChatInterface';
+import { Toaster } from 'react-hot-toast'
 
 const HomePage = () => {
   const [isSidebarOpen, setSidebarOpen] = useState(true);
@@ -14,6 +15,13 @@ const HomePage = () => {
 
   return (
     <div className='flex h-dvh bg-black text-white'>
+      <Toaster position="top-center" toastOptions={{
+        style: {
+          background: '#333',
+          color: '#fff',
+        },
+      }} />
+      
       <Sidebar
         isOpen={isSidebarOpen}
         toggleSidebar={toggleSidebar}

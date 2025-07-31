@@ -3,6 +3,7 @@ import { Send } from 'lucide-react';
 import Textarea from 'react-textarea-autosize';
 import axios from 'axios';
 import { useAuth } from '../../context/AuthContext';
+import toast from 'react-hot-toast';
 
 const ChatInterface = ({ selectedChatId, setSelectedChatId, setChats }) => {
   const { user } = useAuth();
@@ -37,6 +38,12 @@ const ChatInterface = ({ selectedChatId, setSelectedChatId, setChats }) => {
 
   const handleSendMessage = async (e) => {
     e.preventDefault();
+
+    if (!user) {
+      toast.error("Please sign up to start a chat!");
+      return;
+    }
+    
     if (!input.trim() || !user) return;
     const userMessage = { role: 'user', content: input };
     setMessages((prev) => [...prev, userMessage]);
