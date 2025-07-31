@@ -5,7 +5,7 @@ import ChatInterface from '../components/chat/ChatInterface';
 import { Toaster } from 'react-hot-toast'
 
 const HomePage = () => {
-  const [isSidebarOpen, setSidebarOpen] = useState(true);
+  const [isSidebarOpen, setSidebarOpen] = useState(false);
   const [selectedChatId, setSelectedChatId] = useState(null);
   const [chats, setChats] = useState([]);
 
@@ -21,7 +21,7 @@ const HomePage = () => {
           color: '#fff',
         },
       }} />
-      
+
       <Sidebar
         isOpen={isSidebarOpen}
         toggleSidebar={toggleSidebar}
