@@ -17,6 +17,7 @@ export const AuthProvider = ({ children }) => {
         toast.success("Logged out successfully!");
         } catch (error) {
             console.error(`Failed to log out` , error)
+            toast.error("Something went wrong")
         }
     }
 
